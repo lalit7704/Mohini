@@ -1,0 +1,163 @@
+{% comment %}
+  Premium Shopify Header System - Main Section
+  OS 2.0 compliant with 10 style selector using case logic
+{% endcomment %}
+
+{%- liquid
+  assign selected_style = section.settings.header_style
+  assign style_snippet = 'header-style-' | append: selected_style
+-%}
+
+{%- case selected_style -%}
+  {%- when '1' -%}
+    {%- render 'header-style-1',
+      section: section,
+      logo_image: section.settings.logo_image,
+      sticky_header: section.settings.sticky_header,
+      enable_transparent: section.settings.enable_transparent,
+      search_icon: section.settings.search_icon,
+      account_icon: section.settings.account_icon,
+      menu: section.settings.menu
+    -%}
+  {%- when '2' -%}
+    {%- render 'header-style-2',
+      section: section,
+      logo_image: section.settings.logo_image,
+      sticky_header: section.settings.sticky_header,
+      enable_transparent: section.settings.enable_transparent,
+      search_icon: section.settings.search_icon,
+      account_icon: section.settings.account_icon,
+      menu: section.settings.menu
+    -%}
+  {%- else -%}
+    {%- render 'header-style-1' -%}
+{%- endcase -%}
+
+{% schema %}
+{
+  "name": "Premium Header",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "header_style",
+      "options": [
+        {"value": "1", "label": "Style 1 - Modern Centered"},
+        {"value": "2", "label": "Style 2 - Logo Left Stacked"},
+        {"value": "3", "label": "Style 3 - Full Width"},
+        {"value": "4", "label": "Style 4 - Minimal Icons"},
+        {"value": "5", "label": "Style 5 - Split Navigation"},
+        {"value": "6", "label": "Style 6 - Off-Canvas"},
+        {"value": "7", "label": "Style 7 - Magazine Layout"},
+        {"value": "8", "label": "Style 8 - Ecommerce Pro"},
+        {"value": "9", "label": "Style 9 - Luxury Brand"},
+        {"value": "10", "label": "Style 10 - Creative Agency"}
+      ],
+      "default": "1",
+      "label": "Header Style"
+    },
+    {
+      "type": "header",
+      "content": "Logo & Branding"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 150,
+      "unit": "px",
+      "label": "Logo width",
+      "info": "Recommended: 150-250px wide"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "default": true,
+      "label": "Sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparent",
+      "default": false,
+      "label": "Transparent header (scroll to stick)"
+    },
+    {
+      "type": "checkbox",
+      "id": "search_icon",
+      "default": true,
+      "label": "Show search icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "account_icon",
+      "default": true,
+      "label": "Show account icon"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "section.header.settings.header__3.content"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "section.padding.padding_top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "section.padding.padding_bottom",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium Header"
+    }
+  ]
+}
+{% endschema %}
+

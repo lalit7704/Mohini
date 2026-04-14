@@ -1,0 +1,211 @@
+{% comment %}
+  Premium Header Style 2: Logo Left + Stacked Icons Right
+  Desktop: Compact logo left, stacked icons/nav right
+  Mobile: Full-width stacked layout
+{% endcomment %}
+
+{% liquid
+  assign header_style = 'header-style-2'
+  assign enable_sticky = section.settings.sticky_header
+  assign enable_transparent = section.settings.enable_transparent
+  assign logo = section.settings.logo_image | default: settings.logo
+  assign menu = section.settings.menu | default: section.settings.menu
+%}
+
+<div class="premium-header-wrapper {{ header_style }}{% if enable_sticky %} premium-header--sticky{% endif %}{% if enable_transparent %} premium-header--transparent{% endif %}" data-section-id="{{ section.id }}">
+  
+  <!-- Mobile Menu Overlay -->
+  <div class="premium-header__mobile-menu" id="mobile-menu-{{ section.id }}">
+    <button class="premium-header__mobile-close" aria-label="{{ 'general.close' | t }}">
+      <span class="svg-wrapper">{{ 'icon-close.svg' | inline_asset_content }}</span>
+    </button>
+    
+    {% if menu %}
+      <ul class="premium-header__mobile-nav">
+        {% for link in linklists[menu].links %}
+          <li>
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <!-- Main Header -->
+  <header class="premium-header page-width">
+    
+    <!-- Logo Left -->
+    <div class="premium-header__logo-wrapper">
+      <a href="{{ routes.root_url }}" class="premium-header__logo">
+        {% if logo %}
+          {{ logo | image_url: width: 200 | image_tag: 
+            class: 'premium-header__logo-img',
+            loading: 'lazy',
+            alt: logo.alt | default: shop.name | escape
+          }}
+        {% else %}
+          <span>{{ shop.name }}</span>
+        {% endif %}
+      </a>
+    </div>
+
+    <!-- Right Side: Icons + Hamburger -->
+    <div class="premium-header__right-side">
+      
+      {% if section.settings.search_icon %}
+        <a href="#" class="premium-header__icon premium-header__search-toggle" aria-label="{{ 'general.search.search' | t }}">
+          <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+        </a>
+      {% endif %}
+
+      {% if section.settings.account_icon and shop.customer_accounts_enabled %}
+        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" 
+           class="premium-header__icon" rel="nofollow" aria-label="{{ 'customer.account' | t }}">
+          <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+        </a>
+      {% endif %}
+
+      <!-- Cart -->
+      <a href="{{ routes.cart_url }}" class="premium-header__icon" id="cart-icon-{{ section.id }}" aria-label="{{ 'templates.cart.cart' | t }}">
+        <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+        <span class="premium-header__cart-count" style="display: none;">{{ cart.item_count }}</span>
+      </a>
+
+      <!-- Desktop Nav (compact) -->
+      {% if menu %}
+        <nav class="premium-header__desktop-nav" aria-label="{{ 'general.navigation' | t }}">
+          <details class="premium-header__nav-dropdown">
+            <summary class="premium-header__nav-toggle">
+              <span>Menu</span>
+              <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+            </summary>
+            <ul>
+              {% for link in linklists[menu].links %}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </details>
+        </nav>
+      {% endif %}
+
+      <!-- Mobile Hamburger -->
+      <button class="premium-header__icon premium-header__mobile-menu-toggle hamburger" aria-label="{{ 'general.menu' | t }}" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Search Modal -->
+  {% if section.settings.search_icon %}
+    <div class="premium-header__search-modal" id="search-modal-{{ section.id }}">
+      <div class="premium-header__search-form">
+        <form action="{{ routes.search_url }}" method="get" role="search">
+          <input 
+            type="search" 
+            class="premium-header__search-input" 
+            name="q"
+            placeholder="{{ 'general.search.search' | t }}"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+
+<style>
+  /* Style 2 Specific Overrides */
+  .header-style-2 .premium-header {
+    gap: 1rem;
+  }
+  
+  .header-style-2 .premium-header__logo-wrapper {
+    flex-shrink: 0;
+  }
+  
+  .header-style-2 .premium-header__right-side {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  
+  @media (min-width: 990px) {
+    .header-style-2 .premium-header__right-side {
+      gap: 1.5rem;
+    }
+    
+    .header-style-2 .premium-header__nav-dropdown {
+      margin-left: auto;
+    }
+  }
+  
+  .premium-header__nav-dropdown {
+    position: relative;
+  }
+  
+  .premium-header__nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  
+  .premium-header__nav-toggle:hover {
+    background: rgba(var(--color-foreground), 0.08);
+  }
+  
+  .premium-header__nav-dropdown ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgb(var(--color-background));
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    list-style: none;
+    padding: 1rem;
+    margin: 0.5rem 0 0 0;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: var(--transition);
+  }
+  
+  .premium-header__nav-dropdown[open] ul {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .premium-header__nav-dropdown ul li {
+    margin: 0;
+  }
+  
+  .premium-header__nav-dropdown ul a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+  
+  .premium-header__nav-dropdown ul a:hover {
+    background: rgba(var(--color-foreground), 0.08);
+  }
+</style>
+
+{{ 'premium-header.css' | asset_url | stylesheet_tag }}
+{{ 'premium-header.js' | asset_url | script_tag }}
+
