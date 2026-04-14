@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-=======
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
->>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
+
 {
   "name": "t:sections.header.name",
   "type": "header",
@@ -56,7 +45,6 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
-<<<<<<< HEAD
     },
     "premium-header": {
       "type": "premium-header",
@@ -73,20 +61,17 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
-=======
->>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
+
     }
   },
   "order": [
     "announcement-bar",
-<<<<<<< HEAD
     "header",
     "premium-header"
   ]
 }
 
-=======
     "header"
   ]
 }
->>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
+
