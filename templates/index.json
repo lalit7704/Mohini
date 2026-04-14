@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+=======
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
 {
   "sections": {
     "image_banner": {
@@ -29,6 +41,7 @@
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
+<<<<<<< HEAD
         "desktop_content_position": "bottom-center",
         "show_text_box": false,
         "image_behavior": "none",
@@ -36,17 +49,32 @@
         "color_scheme": "scheme-3",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": false,
+=======
+        "image_behavior": "none",
+        "desktop_content_position": "bottom-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": false,
+        "color_scheme": "scheme-3",
+        "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
         "show_text_below": false
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
+<<<<<<< HEAD
+=======
+        "collection": "all",
+        "products_to_show": 8,
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
         "title": "Featured products",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
+<<<<<<< HEAD
         "collection": "all",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -56,6 +84,14 @@
         "view_all_style": "solid",
         "enable_desktop_slider": false,
         "swipe_on_mobile": false,
+=======
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
@@ -63,13 +99,79 @@
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
+<<<<<<< HEAD
         "padding_top": 44,
         "padding_bottom": 36
       }
+=======
+        "swipe_on_mobile": false,
+        "padding_top": 44,
+        "padding_bottom": 36
+      }
+    },
+    "slideshow_6NDDVM": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_4MnjUP": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_zfMpPt": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_4MnjUP",
+        "slide_zfMpPt"
+      ],
+      "name": "t:sections.slideshow.presets.name",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": true,
+        "accessibility_info": "Slideshow about our brand"
+      }
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
     }
   },
   "order": [
     "image_banner",
+<<<<<<< HEAD
     "featured_collection"
+=======
+    "featured_collection",
+    "slideshow_6NDDVM"
+>>>>>>> d325c2aae9ceb6b1085c78119d69cceb2602c43d
   ]
 }
