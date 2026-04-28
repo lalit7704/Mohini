@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
-<script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
@@ -312,14 +312,7 @@
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
-<amp-ad
-     layout="fixed"
-     width="728"
-     height="90"
-     type="adsense"
-     data-ad-client="ca-pub-5319727568049071"
-     data-ad-slot="8972919763">
-</amp-ad>
+
     {% sections 'footer-group' %}
 
     <ul hidden>
@@ -389,5 +382,6 @@
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+
   </body>
 </html>
