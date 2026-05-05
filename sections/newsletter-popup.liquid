@@ -7,7 +7,7 @@
     
     {% if section.settings.image != blank %}
       <div class="nl-image">
-        <img src="{{ section.settings.image | image_url: width: 600 }}" alt="">
+        <img src="{{ section.settings.image | image_url: width: 600, height: 600 }}" alt="{{ section.settings.image.alt | escape }}" width="600" height="600" loading="lazy">
       </div>
     {% endif %}
 
