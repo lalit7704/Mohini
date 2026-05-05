@@ -1,0 +1,180 @@
+{% schema %}
+{
+  "name": "Hover Image Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Elevate your style with timeless elegance in the new collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Hover Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "timeless"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Hover Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hover Image Text"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="hover-text-section">
+  <div class="page-width">
+    
+    <h2 class="hover-heading">
+      {% assign words = section.settings.main_heading | split: ' ' %}
+      
+      {% for word in words %}
+        {% assign matched = false %}
+        
+        {% for block in section.blocks %}
+          {% if block.settings.text == word %}
+            <span class="hover-word" 
+              data-image="{{ block.settings.image | image_url: width: 600 }}">
+              {{ word }}
+            </span>
+            {% assign matched = true %}
+          {% endif %}
+        {% endfor %}
+        
+        {% unless matched %}
+          <span>{{ word }}</span>
+        {% endunless %}
+        
+      {% endfor %}
+    </h2>
+
+    <div class="hover-image-box">
+      <img src="" alt="hover image" id="hover-image">
+    </div>
+
+  </div>
+</section>
+
+<style>
+.hover-text-section {
+  position: relative;
+  padding: 100px 0;
+}
+
+.hover-heading {
+  font-size: 64px;
+  line-height: 1.2;
+  font-family: serif;
+}
+span.hover-word {
+    position: relative;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-thickness: 3px;
+    text-decoration-color: gray;
+    text-underline-offset: 7px;
+}
+.hover-word {
+  position: relative;
+  cursor: pointer;
+  font-style: italic;
+}
+
+/* Floating image */
+.hover-image-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 999;
+}
+
+.hover-image-box img {
+  width: 100%;
+  border-radius: 12px;
+}
+@media(min-width:768px){
+h2.hover-heading {
+    text-align: center;
+    line-height: 88px;
+}
+div#shopify-section-template--22219705843960__hover_image_text_VA98Xh .page-width {
+    max-width: 1066px !important;
+}
+}
+/* active state */
+.hover-image-box.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+@media(max-width:768px){
+.hover-heading {
+    font-size: 30px;
+    line-height: 1.5;
+    font-family: serif;
+    text-align: center;
+}
+.hover-text-section {
+    position: relative;
+    padding: 25px 0;
+}
+
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const words = document.querySelectorAll(".hover-word");
+  const imageBox = document.querySelector(".hover-image-box");
+  const image = document.getElementById("hover-image");
+
+  let mouseX = 0;
+  let mouseY = 0;
+
+  // Smooth follow animation
+  function animate() {
+    imageBox.style.left = mouseX + "px";
+    imageBox.style.top = mouseY + "px";
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  words.forEach(word => {
+
+    word.addEventListener("mouseenter", function() {
+      const img = this.getAttribute("data-image");
+      if (img) {
+        image.src = img;
+        imageBox.classList.add("active");
+      }
+    });
+
+    word.addEventListener("mousemove", function(e) {
+      mouseX = e.clientX + 20; // thoda offset
+      mouseY = e.clientY + 20;
+    });
+
+    word.addEventListener("mouseleave", function() {
+      imageBox.classList.remove("active");
+    });
+
+  });
+});
+</script>

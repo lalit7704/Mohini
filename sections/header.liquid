@@ -118,6 +118,7 @@
   endif
 %}
 
+{%- if section.settings.header_style == 'standard' -%}
 <{{ header_tag }}
   {% if header_tag == 'sticky-header' %}
     data-sticky-type="{{ section.settings.sticky_header_type }}"
@@ -304,6 +305,445 @@
     </div>
   </header>
 </{{ header_tag }}>
+{%- elsif section.settings.header_style contains 'premium' -%}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  
+  <style>
+    /* ==============================================
+       BASE PREMIUM STYLES (Strict Padding & Margins)
+       ============================================== */
+    :root {
+      --ph-transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ph-text: rgb(var(--color-foreground));
+      --ph-bg: rgb(var(--color-background));
+    }
+    .premium-header-wrapper { position: relative; z-index: 100; width: 100%; background: var(--ph-bg); transition: background-color var(--ph-transition), box-shadow var(--ph-transition); }
+    .premium-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2rem; max-width: var(--page-width); margin: 0 auto; }
+    
+    .ph-nav { display: none; } /* Hidden on mobile by default */
+    .ph-nav-list { display: flex; align-items: center; gap: 3rem; list-style: none; margin: 0; padding: 0; }
+    .ph-nav-link { text-decoration: none; color: var(--ph-text); font-size: 1.5rem; font-weight: 500; letter-spacing: 0.3px; transition: color 0.3s ease, opacity 0.3s ease; position: relative; }
+    .ph-nav-link:hover { opacity: 0.7; }
+    
+    .ph-logo { flex-shrink: 0; }
+    .ph-logo img { max-height: 45px; width: auto; transition: transform var(--ph-transition); }
+    .ph-logo span { font-size: 2.2rem; font-weight: 700; color: var(--ph-text); letter-spacing: 1px; }
+    
+    .ph-icons { display: flex; align-items: center; gap: 2rem; }
+    .ph-icon { cursor: pointer; color: var(--ph-text); display: flex; align-items: center; position: relative; }
+    .ph-icon .svg-wrapper { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .ph-icon:hover .svg-wrapper { transform: scale(1.15); }
+    
+    .ph-search-center { display: none; }
+    .ph-bottom-nav { display: none; }
+
+    /* Mobile Specifics */
+    @media screen and (max-width: 989px) {
+      .premium-header { padding: 1.5rem; }
+      .ph-icons { gap: 1.5rem; }
+      .ph-logo img { max-height: 35px; }
+    }
+
+    /* Desktop Specifics */
+    @media screen and (min-width: 990px) {
+      .premium-header { padding: 2rem 4rem; }
+      .ph-nav { display: block; }
+      .premium-header__mobile-menu-toggle { display: none !important; }
+    }
+
+    /* ==============================================
+       10 UNIQUE PREMIUM DESIGNS
+       ============================================== */
+
+    /* Premium 1: Minimalist Luxury (Cartier Vibe) */
+    /* Logo strictly centered, Nav left, Icons right */
+    @media screen and (min-width: 990px) {
+      .premium-1 .premium-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding-top: 2.5rem; padding-bottom: 2.5rem; }
+      .premium-1 .ph-nav { justify-self: start; }
+      .premium-1 .ph-logo { text-align: center; }
+      .premium-1 .ph-icons { justify-self: end; }
+      .premium-1 .ph-nav-link { font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 400; }
+    }
+
+    /* Premium 2: Apple Floating Glassmorphism */
+    /* Floats below the top edge, blurred background, subtle shadows */
+    @media screen and (min-width: 990px) {
+      .premium-2 { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 1400px; border-radius: 100px; background: rgba(var(--color-background), 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(var(--color-foreground), 0.08); box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+      .premium-2 .premium-header { padding: 1.2rem 3rem; }
+      .premium-2 .ph-nav-link { font-size: 1.3rem; font-weight: 600; color: rgba(var(--color-foreground), 0.8); }
+      .premium-2 .ph-nav-link:hover { color: var(--ph-text); }
+    }
+    @media screen and (max-width: 989px) {
+      .premium-2 { border-bottom: 1px solid rgba(var(--color-foreground), 0.1); }
+    }
+
+    /* Premium 3: The E-commerce Powerhouse (Amazon/Flipkart) */
+    /* Big search bar in the middle, categories in a separate bottom bar */
+    @media screen and (min-width: 990px) {
+      .premium-3 .premium-header { display: grid; grid-template-columns: auto 1fr auto; gap: 4rem; padding-bottom: 1.5rem; }
+      .premium-3 .ph-search-center { display: block; width: 100%; max-width: 600px; justify-self: center; }
+      .premium-3 .ph-search-center form { display: flex; width: 100%; border: 2px solid var(--ph-text); border-radius: 6px; overflow: hidden; }
+      .premium-3 .ph-search-center input { flex-grow: 1; border: none; padding: 1.2rem 2rem; font-size: 1.4rem; outline: none; background: transparent; color: var(--ph-text); }
+      .premium-3 .ph-search-center button { background: var(--ph-text); color: var(--ph-bg); border: none; padding: 0 2rem; cursor: pointer; transition: opacity 0.2s; }
+      .premium-3 .ph-search-center button:hover { opacity: 0.8; }
+      .premium-3 .ph-search-center button svg { fill: var(--ph-bg); color: var(--ph-bg); width: 20px; height: 20px; }
+      .premium-3 .ph-nav { display: none; }
+      .premium-3 .ph-bottom-nav { display: block; background: rgba(var(--color-foreground), 0.03); border-top: 1px solid rgba(var(--color-foreground), 0.08); padding: 1.2rem 4rem; }
+      .premium-3 .ph-nav-list { justify-content: flex-start; gap: 2.5rem; }
+      .premium-3 .ph-nav-link { font-size: 1.4rem; font-weight: 600; }
+    }
+
+    /* Premium 4: Brutalist Editorial (Zara Style) */
+    /* Bold, thick lines, uppercase everything */
+    .premium-4 { border-bottom: 2px solid var(--ph-text); }
+    .premium-4 .premium-header { padding-top: 2rem; padding-bottom: 2rem; }
+    @media screen and (min-width: 990px) {
+      .premium-4 .ph-nav-list { gap: 0; }
+      .premium-4 .ph-nav-link { text-transform: uppercase; font-weight: 800; font-size: 1.3rem; letter-spacing: 2px; padding: 0 2.5rem; border-right: 1px solid rgba(var(--color-foreground), 0.2); }
+      .premium-4 .ph-nav-item:last-child .ph-nav-link { border-right: none; }
+      .premium-4 .ph-logo span { font-size: 3rem; text-transform: uppercase; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 5: BRUTALIST BORDERED (GSAP Enhanced)
+       ========================================================================== */
+    .premium-5 { border-bottom: 4px solid var(--ph-text); background: var(--ph-bg); }
+    .premium-5 .premium-header { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    @media screen and (min-width: 990px) {
+      .premium-5 .ph-nav-list { gap: 0; }
+      .premium-5 .ph-nav-link { text-transform: uppercase; font-weight: 900; font-size: 1.4rem; letter-spacing: 1px; padding: 1rem 2.5rem; border: 2px solid transparent; transition: none; display: inline-block; }
+      .premium-5 .ph-nav-item { border-right: 2px solid var(--ph-text); }
+      .premium-5 .ph-nav-item:last-child { border-right: none; }
+      .premium-5 .ph-logo span { font-size: 3.2rem; text-transform: uppercase; font-weight: 900; letter-spacing: -1px; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 6: PILL SHAPED NAV (GSAP Enhanced)
+       ========================================================================== */
+    @media screen and (min-width: 990px) {
+      .premium-6 .premium-header { display: grid; grid-template-columns: auto auto auto; justify-content: space-between; }
+      .premium-6 .ph-nav { display: flex; justify-content: center; }
+      .premium-6 .ph-nav-list { background: var(--ph-text); padding: 0.5rem 1rem; border-radius: 50px; display: inline-flex; }
+      .premium-6 .ph-nav-link { color: var(--ph-bg); padding: 1rem 2rem; border-radius: 50px; font-weight: 600; display: inline-block; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 7: LUXURY MINIMALIST (GSAP Enhanced)
+       ========================================================================== */
+    @media screen and (min-width: 990px) {
+      .premium-7 .premium-header { padding-top: 3.5rem; padding-bottom: 3.5rem; position: relative; }
+      .premium-7 .ph-nav-link { font-weight: 300; letter-spacing: 2px; font-size: 1.3rem; text-transform: uppercase; }
+      .premium-7 .ph-logo span { font-size: 2.8rem; font-weight: 300; letter-spacing: 4px; }
+      .premium-7 .ph-nav-list { position: relative; }
+      .premium-7 .magic-dot { position: absolute; bottom: -10px; left: 0; width: 5px; height: 5px; background: var(--ph-text); border-radius: 50%; opacity: 0; pointer-events: none; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 8: E-COMMERCE HEAVY (GSAP Enhanced)
+       ========================================================================== */
+    @media screen and (min-width: 990px) {
+      .premium-8 .premium-header { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 3rem; align-items: center; padding-bottom: 1.5rem; }
+      .premium-8 .ph-search-center { display: block; width: 100%; position: relative; z-index: 10; }
+      .premium-8 .ph-search-center form { display: flex; border: 2px solid rgba(var(--color-foreground), 0.1); border-radius: 8px; background: var(--ph-bg); overflow: hidden; transition: box-shadow 0.3s; }
+      .premium-8 .ph-search-center input { flex-grow: 1; border: none; padding: 1.5rem 2rem; font-size: 1.5rem; outline: none; background: transparent; }
+      .premium-8 .ph-search-center button { background: transparent; border: none; padding: 0 2rem; cursor: pointer; }
+      .premium-8 .ph-nav { display: none; }
+      .premium-8 .ph-bottom-nav { display: block; border-top: 1px solid rgba(var(--color-foreground), 0.05); padding: 1.5rem 0; }
+      .premium-8 .ph-nav-list { justify-content: center; gap: 4rem; }
+      .premium-8 .ph-nav-link { font-weight: 600; font-size: 1.4rem; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 9: DARK NEUMORPHISM (GSAP Enhanced)
+       ========================================================================== */
+    .premium-9 { background: #121212; --ph-text: #e0e0e0; --ph-bg: #121212; }
+    @media screen and (min-width: 990px) {
+      .premium-9 .premium-header { padding: 2.5rem 4rem; }
+      .premium-9 .ph-nav-link { padding: 1rem 2.5rem; border-radius: 12px; box-shadow: 5px 5px 10px #070707, -5px -5px 10px #1d1d1d; font-weight: 500; transition: none; display: inline-block; }
+      .premium-9 .ph-icon .svg-wrapper { padding: 1rem; border-radius: 50%; box-shadow: 5px 5px 10px #070707, -5px -5px 10px #1d1d1d; }
+      .premium-9 svg { fill: #e0e0e0; }
+      .premium-9 .ph-logo span { color: #e0e0e0; }
+    }
+
+    /* ==========================================================================
+       PREMIUM 10: DYNAMIC UNDERLINE (GSAP Enhanced)
+       ========================================================================== */
+    @media screen and (min-width: 990px) {
+      .premium-10 .ph-nav-list { position: relative; display: inline-flex; }
+      .premium-10 .ph-nav-link { font-size: 1.5rem; padding: 1rem 1.5rem; display: inline-block; }
+      .premium-10 .gsap-highlighter { position: absolute; bottom: 0; left: 0; height: 2px; background: var(--ph-text); width: 0; pointer-events: none; border-radius: 2px; }
+    }
+
+    /* Modals & Toggles */
+    .premium-header__mobile-menu--open { display: block !important; }
+    .premium-header__search-modal--open { display: block !important; }
+    .cart-count-bubble { position: absolute; top: -8px; right: -8px; background: var(--ph-text); color: var(--ph-bg); font-size: 1rem; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+  </style>
+
+  <div class="premium-header-wrapper {{ section.settings.header_style }}">
+    <header class="premium-header page-width">
+      
+      <!-- Mobile Toggle -->
+      <div class="ph-icon premium-header__mobile-menu-toggle">
+        <span class="svg-wrapper">{{ 'icon-hamburger.svg' | inline_asset_content }}</span>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="ph-nav small-hide medium-hide">
+        {%- if section.settings.menu != blank -%}
+          <ul class="ph-nav-list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="ph-nav-item"><a href="{{ link.url }}" class="ph-nav-link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </nav>
+
+      <!-- Logo -->
+      <div class="ph-logo">
+        <a href="{{ routes.root_url }}" class="header__heading-link link focus-inset" style="text-decoration: none;">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {{ settings.logo | image_url: width: 600 | image_tag: class: 'header__heading-logo', height: logo_height, width: settings.logo_width, alt: logo_alt }}
+          {%- else -%}
+            <span class="h2">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+      
+      <!-- Center Search Bar (For E-commerce Premium-3 Style) -->
+      <div class="ph-search-center small-hide medium-hide">
+        <form action="{{ routes.search_url }}" method="get">
+          <input type="text" name="q" placeholder="Search for products, brands and more...">
+          <button type="submit" aria-label="Search">
+            <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Icons -->
+      <div class="ph-icons">
+        <div class="ph-icon premium-header__search-toggle">
+          <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+        </div>
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="ph-icon small-hide">
+            <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+          </a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="ph-icon premium-header__cart">
+          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+          {%- if cart != empty -%}
+            <div class="cart-count-bubble premium-header__cart-count">
+              {%- if cart.item_count < 100 -%}
+                <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </a>
+      </div>
+    </header>
+    
+    <!-- Bottom Navigation Bar (For E-commerce Premium-3 Style) -->
+    <div class="ph-bottom-nav small-hide medium-hide">
+      <div class="page-width">
+        {%- if section.settings.menu != blank -%}
+          <ul class="ph-nav-list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="ph-nav-item"><a href="{{ link.url }}" class="ph-nav-link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Mobile Menu Modal -->
+    <div class="premium-header__mobile-menu" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; z-index: 10; background: rgb(var(--color-background)); padding: 2rem; border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);">
+      {%- if section.settings.menu != blank -%}
+        <ul class="list-menu" style="list-style: none; margin: 0; padding: 0;">
+          {%- for link in section.settings.menu.links -%}
+            <li style="padding: 1rem 0; border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.04);">
+              <a href="{{ link.url }}" class="list-menu__item list-menu__item--link" style="font-size: 1.6rem;">{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <!-- Search Modal -->
+    <div class="premium-header__search-modal" style="display: none; position: absolute; top: 100%; left: 0; width: 100%; z-index: 10; background: rgb(var(--color-background)); padding: 2rem; border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);">
+      <form action="{{ routes.search_url }}" method="get" role="search" style="display: flex; width: 100%; max-width: 600px; margin: 0 auto; gap: 1rem;">
+        <input type="text" name="q" class="premium-header__search-input field__input" placeholder="Search products..." style="flex-grow: 1;">
+        <button type="submit" class="button button--primary">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ 'premium-header.js' | asset_url }}" defer="defer"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const checkGSAP = setInterval(() => {
+        if (window.gsap && window.ScrollTrigger) {
+          clearInterval(checkGSAP);
+          gsap.registerPlugin(ScrollTrigger);
+          
+          const header = document.querySelector('.premium-header-wrapper');
+          const logo = document.querySelector('.ph-logo');
+          const navItems = document.querySelectorAll('.ph-nav-item');
+          const icons = document.querySelectorAll('.ph-icon');
+          
+          // Smooth GSAP Entrance Animation (Extremely Premium feel)
+          const tl = gsap.timeline();
+          tl.from(header, { yPercent: -100, opacity: 0, duration: 1, ease: "power4.out" })
+            .from(logo, { y: 20, opacity: 0, duration: 0.6, ease: "power3.out" }, "-=0.6")
+            .from(navItems, { y: 15, opacity: 0, duration: 0.5, stagger: 0.05, ease: "power3.out" }, "-=0.5")
+            .from(icons, { scale: 0.8, opacity: 0, duration: 0.5, stagger: 0.1, ease: "back.out(1.7)" }, "-=0.4");
+
+          // Premium Smart Sticky Scroll Effect
+          let lastScrollTop = 0;
+          ScrollTrigger.create({
+            start: "top -80",
+            onUpdate: (self) => {
+              let st = self.scroll();
+              if (st > lastScrollTop) {
+                // Scroll Down -> Hide Header
+                gsap.to(header, { yPercent: -100, duration: 0.4, ease: "power2.inOut", position: "fixed", top: 0, left: 0, right: 0 });
+              } else {
+                // Scroll Up -> Show Header with shadow
+                gsap.to(header, { yPercent: 0, duration: 0.4, ease: "power2.out", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", position: "fixed", top: 0, left: 0, right: 0 });
+              }
+              if (st <= 10) {
+                gsap.to(header, { position: "relative", boxShadow: "none", duration: 0.2 });
+              }
+              lastScrollTop = st;
+            }
+          });
+
+          // ==============================================
+          // GSAP ADVANCED EFFECTS FOR TAB 5 TO 10
+          // ==============================================
+
+          // Premium 5: Brutalist Skew & Glitch
+          if (header.classList.contains('premium-5')) {
+            navItems.forEach(item => {
+              item.addEventListener('mouseenter', () => {
+                gsap.to(item.querySelector('a'), { skewX: -10, scale: 1.05, duration: 0.2, ease: "power1.inOut" });
+                gsap.to(item, { backgroundColor: "var(--ph-text)", duration: 0.1 });
+                item.querySelector('a').style.color = "var(--ph-bg)";
+              });
+              item.addEventListener('mouseleave', () => {
+                gsap.to(item.querySelector('a'), { skewX: 0, scale: 1, duration: 0.2, ease: "power1.inOut" });
+                gsap.to(item, { backgroundColor: "transparent", duration: 0.1 });
+                item.querySelector('a').style.color = "var(--ph-text)";
+              });
+            });
+          }
+
+          // Premium 6: Pill Bounce Hover
+          if (header.classList.contains('premium-6')) {
+            navItems.forEach(item => {
+              item.addEventListener('mouseenter', () => {
+                gsap.to(item.querySelector('a'), { y: -4, backgroundColor: "rgba(255,255,255,0.15)", duration: 0.4, ease: "back.out(3)" });
+              });
+              item.addEventListener('mouseleave', () => {
+                gsap.to(item.querySelector('a'), { y: 0, backgroundColor: "transparent", duration: 0.4, ease: "power2.out" });
+              });
+            });
+          }
+
+          // Premium 7: Luxury Magic Dot Follower
+          if (header.classList.contains('premium-7')) {
+            const navList = document.querySelector('.premium-7 .ph-nav-list');
+            if (navList) {
+              const dot = document.createElement('div');
+              dot.className = 'magic-dot';
+              navList.appendChild(dot);
+              
+              navItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                  const rect = item.getBoundingClientRect();
+                  const parentRect = navList.getBoundingClientRect();
+                  gsap.to(dot, {
+                    x: (rect.left - parentRect.left) + (rect.width / 2) - 2.5,
+                    opacity: 1,
+                    scale: 1.5,
+                    duration: 0.6,
+                    ease: "elastic.out(1, 0.5)"
+                  });
+                });
+              });
+              navList.addEventListener('mouseleave', () => {
+                gsap.to(dot, { opacity: 0, scale: 0, duration: 0.3 });
+              });
+            }
+          }
+
+          // Premium 8: E-commerce Focus Expansion
+          if (header.classList.contains('premium-8')) {
+            const searchInput = document.querySelector('.premium-8 .ph-search-center input');
+            const searchForm = document.querySelector('.premium-8 .ph-search-center form');
+            if (searchInput) {
+              searchInput.addEventListener('focus', () => {
+                gsap.to(searchForm, { scale: 1.03, boxShadow: "0 15px 30px rgba(0,0,0,0.1)", borderColor: "var(--ph-text)", duration: 0.4, ease: "back.out(1.5)" });
+                gsap.to([logo, icons], { opacity: 0.3, duration: 0.3 });
+              });
+              searchInput.addEventListener('blur', () => {
+                gsap.to(searchForm, { scale: 1, boxShadow: "none", borderColor: "rgba(var(--color-foreground), 0.1)", duration: 0.3 });
+                gsap.to([logo, icons], { opacity: 1, duration: 0.3 });
+              });
+            }
+          }
+
+          // Premium 9: Neumorphic 3D Press
+          if (header.classList.contains('premium-9')) {
+            const interactiveEls = document.querySelectorAll('.premium-9 .ph-nav-link, .premium-9 .ph-icon .svg-wrapper');
+            interactiveEls.forEach(el => {
+              el.addEventListener('mousedown', () => {
+                gsap.to(el, { boxShadow: "inset 4px 4px 8px #070707, inset -4px -4px 8px #1d1d1d", scale: 0.96, duration: 0.1 });
+              });
+              el.addEventListener('mouseup', () => {
+                gsap.to(el, { boxShadow: "5px 5px 10px #070707, -5px -5px 10px #1d1d1d", scale: 1, duration: 0.3, ease: "back.out(2)" });
+              });
+              el.addEventListener('mouseleave', () => {
+                gsap.to(el, { boxShadow: "5px 5px 10px #070707, -5px -5px 10px #1d1d1d", scale: 1, duration: 0.3 });
+              });
+            });
+          }
+
+          // Premium 10: Dynamic Underline Highlighter
+          if (header.classList.contains('premium-10')) {
+            const navList = document.querySelector('.premium-10 .ph-nav-list');
+            if (navList) {
+              const highlighter = document.createElement('div');
+              highlighter.className = 'gsap-highlighter';
+              navList.appendChild(highlighter);
+              
+              navItems.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                  const rect = item.getBoundingClientRect();
+                  const parentRect = navList.getBoundingClientRect();
+                  gsap.to(highlighter, {
+                    x: rect.left - parentRect.left + 15, // padding offset
+                    width: rect.width - 30, // width minus padding
+                    opacity: 1,
+                    duration: 0.4,
+                    ease: "power3.out"
+                  });
+                });
+              });
+              navList.addEventListener('mouseleave', () => {
+                gsap.to(highlighter, { width: 0, opacity: 0, duration: 0.3 });
+              });
+            }
+          }
+
+        }
+      }, 100);
+    });
+  </script>
+{%- endif -%}
 
 {%- if settings.cart_type == 'notification' -%}
   {%- render 'cart-notification',
@@ -472,6 +912,58 @@
   "class": "section-header",
   "max_blocks": 3,
   "settings": [
+    {
+      "type": "select",
+      "id": "header_style",
+      "label": "Header Style Option",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard (Default Dawn)"
+        },
+        {
+          "value": "premium",
+          "label": "Premium 1 (Classic Elegance)"
+        },
+        {
+          "value": "premium-2",
+          "label": "Premium 2 (Split Center Logo)"
+        },
+        {
+          "value": "premium-3",
+          "label": "Premium 3 (Stacked Minimal)"
+        },
+        {
+          "value": "premium-4",
+          "label": "Premium 4 (Floating Glassmorphism)"
+        },
+        {
+          "value": "premium-5",
+          "label": "Premium 5 (Brutalist Bordered)"
+        },
+        {
+          "value": "premium-6",
+          "label": "Premium 6 (Pill Shaped Nav)"
+        },
+        {
+          "value": "premium-7",
+          "label": "Premium 7 (Luxury Minimalist)"
+        },
+        {
+          "value": "premium-8",
+          "label": "Premium 8 (E-commerce Heavy)"
+        },
+        {
+          "value": "premium-9",
+          "label": "Premium 9 (Dark Neumorphism)"
+        },
+        {
+          "value": "premium-10",
+          "label": "Premium 10 (Dynamic Underline)"
+        }
+      ],
+      "default": "standard"
+    },
     {
       "type": "select",
       "id": "logo_position",

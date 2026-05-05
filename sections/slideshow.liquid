@@ -13,6 +13,39 @@
     display: block!important;
   }
 }
+@media (max-width:768px){
+
+  /* remove auto aspect ratio */
+  #Slider-{{ section.id }}::before,
+  #Slider-{{ section.id }} .media::before,
+  #Slider-{{ section.id }}:not(.banner--mobile-bottom) .banner__content::before {
+    display: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* force full screen height */
+  #Slider-{{ section.id }},
+  #Slider-{{ section.id }} .slideshow__slide,
+  #Slider-{{ section.id }} .slideshow__media,
+  #Slider-{{ section.id }} .banner__media,
+  #Slider-{{ section.id }} .media {
+    height: 100vh !important;
+  }
+
+  /* image fix */
+  #Slider-{{ section.id }} img {
+    height: 100vh !important;
+    object-fit: cover;
+  }
+
+  /* video fix (agar future me add karo) */
+  #Slider-{{ section.id }} video {
+    height: 100vh !important;
+    object-fit: cover;
+  }
+
+}
+
 
   @media(max-width:768px){
     .slideshow__media.banner__media.media{
@@ -20,8 +53,15 @@
     }
   }
 </style>
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+<style>
+  .mobile-image {
+    background: url("{{ section.settings.mb_image | img_url: 'master' }}")!important;
+}
+
+  </style>
 
 {%- if section.settings.slide_height == 'adapt_image' and section.blocks.first.settings.image != blank -%}
   {%- style -%}
@@ -112,84 +152,33 @@
         <div class="slideshow__media banner__media media{% if block.settings.image == blank %} placeholder{% endif %}">
 
   <!-- VIDEO PRIORITY -->
-  {% if block.settings.video != blank or block.settings.video_url != blank or block.settings.mobile_video != blank %}
+  {% if block.settings.video != blank or block.settings.video_url != blank %}
 
     <!-- MOBILE VIDEO -->
     {% if block.settings.mobile_video != blank %}
-      <video class="video-player hidden_desktop" 
-             preload="auto"
-             autoplay 
-             muted 
-             loop 
-             playsinline
-             poster="{{ block.settings.mobile_video.preview_image | img_url: '360x' }}"
-             style="width: 100%; height: auto; object-fit: cover;">
-        {%- for source in block.settings.mobile_video.sources -%}
-          <source src="{{ source.url }}" type="{{ source.mime_type }}">
-        {%- endfor -%}
+      <video class="hidden_desktop" autoplay muted loop playsinline>
+        <source src="{{ block.settings.mobile-video_url }}" type="video/mp4">
       </video>
     {% endif %}
 
     <!-- DESKTOP VIDEO -->
     {% if block.settings.video != blank %}
-      <video class="video-player hidden_mobile" 
-             preload="auto"
-             autoplay 
-             muted 
-             loop 
-             playsinline
-             poster="{{ block.settings.video.preview_image | img_url: '750x' }}"
-             style="width: 100%; height: auto; object-fit: cover;">
-        {%- for source in block.settings.video.sources -%}
-          <source src="{{ source.url }}" type="{{ source.mime_type }}">
-        {%- endfor -%}
-      </video>
+      {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false }}
     {% elsif block.settings.video_url != blank %}
-      <video class="video-player hidden_mobile" 
-             preload="auto"
-             autoplay 
-             muted 
-             loop 
-             playsinline
-             style="width: 100%; height: auto; object-fit: cover;">
+      <video class="hidden_mobile" autoplay muted loop playsinline>
         <source src="{{ block.settings.video_url }}" type="video/mp4">
       </video>
-    {% endif %}
     {% endif %}
 
   {% else %}
 
     <!-- IMAGE FALLBACK -->
     {% if block.settings.image != blank %}
-      <img class="img-responsive hidden_mobile motion-reduce"
-           srcset="{%- if block.settings.image.width >= 165 -%}{{ block.settings.image | img_url: '165x' }} 165w,{%- endif -%}
-                   {%- if block.settings.image.width >= 360 -%}{{ block.settings.image | img_url: '360x' }} 360w,{%- endif -%}
-                   {%- if block.settings.image.width >= 535 -%}{{ block.settings.image | img_url: '535x' }} 535w,{%- endif -%}
-                   {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | img_url: '750x' }} 750w,{%- endif -%}
-                   {%- if block.settings.image.width >= 1070 -%}{{ block.settings.image | img_url: '1070x' }} 1070w,{%- endif -%}
-                   {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | img_url: '1500x' }} 1500w{%- endif -%}"
-           src="{{ block.settings.image | img_url: '750x' }}"
-           sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 10 }}vw, (min-width: 990px) calc(100vw - 130px), 100vw"
-           width="{{ block.settings.image.width }}"
-           height="{{ block.settings.image.height }}"
-           loading="lazy"
-           alt="{{ block.settings.image.alt | escape }}">
+      <img class="img-responsive hidden_mobile" src="{{ block.settings.image | img_url: 'master' }}">
     {% endif %}
 
     {% if block.settings.mobile_image != blank %}
-      <img class="img-responsive hidden_desktop motion-reduce"
-           srcset="{%- if block.settings.mobile_image.width >= 165 -%}{{ block.settings.mobile_image | img_url: '165x' }} 165w,{%- endif -%}
-                   {%- if block.settings.mobile_image.width >= 360 -%}{{ block.settings.mobile_image | img_url: '360x' }} 360w,{%- endif -%}
-                   {%- if block.settings.mobile_image.width >= 535 -%}{{ block.settings.mobile_image | img_url: '535x' }} 535w,{%- endif -%}
-                   {%- if block.settings.mobile_image.width >= 750 -%}{{ block.settings.mobile_image | img_url: '750x' }} 750w,{%- endif -%}
-                   {%- if block.settings.mobile_image.width >= 1070 -%}{{ block.settings.mobile_image | img_url: '1070x' }} 1070w,{%- endif -%}
-                   {%- if block.settings.mobile_image.width >= 1500 -%}{{ block.settings.mobile_image | img_url: '1500x' }} 1500w{%- endif -%}"
-           src="{{ block.settings.mobile_image | img_url: '750x' }}"
-           sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 10 }}vw, (min-width: 990px) calc(100vw - 130px), 100vw"
-           width="{{ block.settings.mobile_image.width }}"
-           height="{{ block.settings.mobile_image.height }}"
-           loading="lazy"
-           alt="{{ block.settings.mobile_image.alt | escape }}">
+      <img class="img-responsive hidden_desktop" src="{{ block.settings.mobile_image | img_url: 'master' }}">
     {% endif %}
 
   {% endif %}
@@ -266,29 +255,6 @@
 {%- if request.design_mode -%}
   <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
-<script>
-  function initVideos() {
-    const videos = document.querySelectorAll('.video-player');
-    videos.forEach(video => {
-      if (video.paused) {
-        video.muted = true;
-        video.play().catch(e => console.log('Video autoplay failed:', e));
-      }
-    });
-  }
-
-  // Initial load
-  document.addEventListener('DOMContentLoaded', initVideos);
-  
-  // Slideshow slide changes
-  document.addEventListener('DOMContentLoaded', function() {
-    const observer = new MutationObserver(initVideos);
-    observer.observe(document.body, { childList: true, subtree: true });
-  });
-
-  // Fallback for theme slideshow events
-  window.addEventListener('load', initVideos);
-</script>
 
 {% schema %}
 {
@@ -433,6 +399,11 @@
           {
             "type": "url",
             "id": "video_url",
+            "label": "External Video URL (MP4)"
+          },
+          {
+            "type": "url",
+            "id": "mobile-video_url",
             "label": "External Video URL (MP4)"
           },
         {
@@ -623,15 +594,13 @@
           ],
           "default": "center",
           "label": "t:sections.slideshow.blocks.slide.settings.text_alignment_mobile.label"
-        },        
+        }
       ]
     }
   ],
-
   "presets": [
     {
       "name": "new slide",
-      "name": "t:sections.slideshow.presets.name",
       "blocks": [
         {
           "type": "slide"
@@ -644,3 +613,10 @@
   ]
 }
 {% endschema %}
+
+
+
+
+
+
+

@@ -1,0 +1,236 @@
+{% unless section.settings.disable_for_account_holders and customer %}
+
+<div id="newsletter-popup-{{ section.id }}" class="nl-popup">
+  <div class="nl-overlay"></div>
+
+  <div class="nl-box {% if section.settings.image_position == 'right' %}reverse{% endif %}">
+    
+    {% if section.settings.image != blank %}
+      <div class="nl-image">
+        <img src="{{ section.settings.image | image_url: width: 600 }}" alt="">
+      </div>
+    {% endif %}
+
+    <div class="nl-content">
+      <button class="nl-close">&times;</button>
+      
+      <h2>{{ section.settings.heading }}</h2>
+      <div class="nl-text">{{ section.settings.text }}</div>
+
+      {% if section.settings.enable_newsletter %}
+        <form method="post" action="/contact#contact_form" class="nl-form">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="email" name="contact[email]" placeholder="Enter your email" required>
+          <button type="submit">{{ section.settings.subit_button_label }}</button>
+        </form>
+      {% endif %}
+
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link }}" class="nl-btn">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+
+      {% if section.settings.show_social_icons %}
+        <div class="nl-social">
+          {% render 'social-icons' %}
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<style>
+.nl-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+.nl-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+.nl-box {
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.nl-box.reverse {
+  flex-direction: row-reverse;
+}
+.nl-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nl-image {
+  width: 50%;
+}
+.nl-content {
+  padding: 30px;
+  width: 50%;
+  position: relative;
+}
+.nl-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+.nl-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.nl-form input {
+  flex: 1;
+  padding: 10px;
+}
+.nl-form button {
+  padding: 10px 20px;
+  background: black;
+  color: white;
+}
+.nl-btn {
+  display: inline-block;
+  margin-top: 10px;
+}
+@media(max-width:768px){
+  .nl-box {
+    flex-direction: column;
+  }
+  .nl-image, .nl-content {
+    width: 100%;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const popup = document.getElementById("newsletter-popup-{{ section.id }}");
+  const delay = {{ section.settings.delay | default: 5 }} * 1000;
+  const days = {{ section.settings.frequency | default: 30 }};
+
+  if (!popup) return;
+
+  const lastShown = localStorage.getItem("nl-popup");
+
+  if (!lastShown || (Date.now() - lastShown > days * 86400000)) {
+    setTimeout(() => {
+      popup.style.display = "block";
+      localStorage.setItem("nl-popup", Date.now());
+    }, delay);
+  }
+
+  popup.querySelector(".nl-close").onclick = () => {
+    popup.style.display = "none";
+  };
+});
+</script>
+
+{% endunless %}
+
+{% schema %}
+{
+  "name": "Newsletter Popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "disable_for_account_holders",
+      "label": "Disable for account holders",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Delay (seconds)",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "label": "Frequency (days)",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Subscribe for offers</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_newsletter",
+      "label": "Enable newsletter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subit_button_label",
+      "label": "Submit Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Popup"
+    }
+  ]
+}
+{% endschema %}
