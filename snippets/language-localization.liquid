@@ -16,6 +16,7 @@
     <span>{{ localization.language.endonym_name | capitalize }}</span>
     {{ 'icon-caret.svg' | inline_asset_content }}
   </button>
+
   <div class="disclosure__list-wrapper language-selector" hidden>
     <ul id="{{ localPosition }}List" role="list" class="disclosure__list list-unstyled">
       {%- for language in localization.available_languages -%}
@@ -39,7 +40,6 @@
             </span>
             <span>
               {{ language.endonym_name | capitalize }}
-            </span>
           </a>
         </li>
       {%- endfor -%}
